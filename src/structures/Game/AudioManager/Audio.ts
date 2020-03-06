@@ -11,7 +11,7 @@ class Audio extends THREEAudio {
   public get currentPosition() {
     if (!this.isPlaying) return 0;
 
-    return (this.context.currentTime - this._lastPosition) * this.getPlaybackRate() - this.offset;
+    return ((this.context.currentTime - this._lastPosition) * this.getPlaybackRate() - this.offset) - this.context.baseLatency;
   }
 
   public play() {

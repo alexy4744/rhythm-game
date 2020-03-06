@@ -1,4 +1,6 @@
-import Note from "@/structures/Staff/Note";
+// Keeps track of current and next note and holds all the notes from a beatmap
+
+import Note from "@/structures/Note";
 
 class Staff {
   private _currentNoteIndex = 0;
@@ -44,10 +46,8 @@ class Staff {
     return this.notes.push(...notes)
   }
 
-  public playNote(index = this.currentNoteIndex) {
+  public proceed(index = this.currentNoteIndex) {
     if (index >= this.notes.length) return;
-
-    this.notes[this.currentNoteIndex].play();
     this._currentNoteIndex += 1;
   }
 

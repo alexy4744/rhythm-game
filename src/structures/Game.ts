@@ -1,11 +1,13 @@
-import AudioManager from "@/structures/Game/Audio/AudioManager";
-import Note from "@/structures/Staff/Note";
+import AudioManager from "@/structures/Game/AudioManager";
+import InputHandler from "@/structures/Game/InputHandler";
+import Video from "@/structures/Game/Video";
+
+import Note from "@/structures/Note";
 import Staff from "@/structures/Staff";
 
 import BeatmapType from "@/types/Beatmap";
-import Audio from "./Game/Audio/Audio";
 
-let counter = 1;
+import FLAGS from "@/constants/flags";
 
 class Game {
   // Flag to make sure that the class was instantiated using the
@@ -14,6 +16,8 @@ class Game {
 
   public constructor(
     private _audioManager: AudioManager,
+    private _inputHandler: InputHandler,
+    private _video: Video,
     private _staff: Staff
   ) {
     if (!Game.created) throw new Error("Game was not instantiated using the create method!");
@@ -22,48 +26,63 @@ class Game {
     requestAnimationFrame(() => this._update());
   }
 
+  public static get created() {
+    return Game._created;
+  }
+
   public get audioManager() {
     return this._audioManager;
   }
 
-  public static get created() {
-    return Game._created;
+  public get inputHandler() {
+    return this._inputHandler;
   }
 
   public get staff() {
     return this._staff;
   }
 
+  public get video() {
+    return this._video;
+  }
+
   public static async create(beatmap: BeatmapType) {
     Game._created = true;
 
-    const audioManager = new AudioManager();
     const staff = new Staff(beatmap.metadata.bpm);
-    const game = new Game(audioManager, staff);
 
-    await audioManager.add("BEATMAP_MP3", beatmap.metadata.mp3);
+    const audioManager = new AudioManager(staff);
+    const inputHandler = new InputHandler(staff);
+    const video = new Video(staff);
 
-    staff.addNotes(beatmap.notes.map(note => new Note(game, note.key, note.start, note.end)))
-    audioManager.entries.get("BEATMAP_MP3")?.play();
+    const game = new Game(audioManager, inputHandler, video, staff);
+
+    await audioManager.add(FLAGS.AUDIO.BEATMAP_MP3, beatmap.metadata.mp3);
+
+    staff.addNotes(beatmap.notes.map(note => new Note(note.key, note.start, note.end)));
+    audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3)?.play();
 
     return game;
   }
 
   // The game loop
   private _update() {
-    const { staff } = this;
-    console.log(staff)
-    if (staff.currentNoteIndex >= staff.notes.length) return;
-    const mp3 = this.audioManager.entries.get("BEATMAP_MP3") as Audio;
-
-    if (staff.currentNote.start / staff.secondsPerBeat < mp3.currentPosition / staff.secondsPerBeat) {
-      console.log(mp3.currentPosition, mp3.currentPosition / staff.secondsPerBeat);
-      staff.playNote(staff.currentNoteIndex);
-      counter += 1;
-      document.body.innerHTML += counter;
-    }
-
     requestAnimationFrame(() => this._update());
+
+    this.video.render();
+
+    if (this.staff.currentNoteIndex >= this.staff.notes.length) return;
+
+    const mp3 = this.audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3);
+    if (!mp3) throw new Error("Beatmap music file not loaded in audio manager!");
+
+    const currentNotePositionInBeats = this.staff.currentNote.start / this.staff.secondsPerBeat;
+    const currentSongPositionInBeats = mp3.currentPosition / this.staff.secondsPerBeat;
+
+    if (currentNotePositionInBeats < currentSongPositionInBeats) {
+      console.log(mp3.currentPosition, currentSongPositionInBeats, currentNotePositionInBeats);
+      this.staff.proceed();
+    }
   }
 }
 

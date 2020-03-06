@@ -1,11 +1,15 @@
 import { AudioListener, AudioLoader } from "three";
 
-import Audio from "./Audio";
+import Audio from "@/structures/Game/AudioManager/Audio";
+
+import Staff from "@/structures/Staff";
 
 class AudioManager {
   private _entries = new Map<String, Audio>();
   private _listener = new AudioListener();
   private _loader = new AudioLoader();
+
+  public constructor(private _staff: Staff) {}
 
   public get entries() {
     return this._entries;
@@ -13,6 +17,10 @@ class AudioManager {
 
   public get listener() {
     return this._listener;
+  }
+
+  public get staff() {
+    return this._staff;
   }
 
   public async add(name: string, url: string, shouldReplace = false) {
