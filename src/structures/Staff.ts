@@ -4,10 +4,10 @@ import Note from "@/structures/Note";
 
 class Staff {
   private _currentNoteIndex = 0;
-  private _notes: Note[] = []
 
   public constructor(
-    private _bpm: number
+    private _bpm: number,
+    private _notes: Note[] = []
   ) { }
 
   public get bpm() {

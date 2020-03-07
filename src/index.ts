@@ -1,6 +1,10 @@
 import Game from "@/structures/Game";
 
-document.querySelector("button")?.addEventListener("click", async () => {
+import "@/assets/scss/main.scss";
+
+document.querySelector("#btn-start")?.addEventListener("click", async () => {
+  document.getElementById("start-wrapper")?.remove();
+
   const game = await Game.create({
     "metadata": {
       "artist": "Test",
@@ -30,6 +34,8 @@ document.querySelector("button")?.addEventListener("click", async () => {
       "fileFormat": "1.0.0"
     }
   });
+
+  game.start();
 });
 
 

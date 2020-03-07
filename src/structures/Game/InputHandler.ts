@@ -1,10 +1,10 @@
-import Staff from "@/structures/Staff";
+import Game from "@/structures/Game";
 
 class InputHandler {
-  public constructor(private _staff: Staff) {}
+  public constructor(private _game: Game) {}
 
-  public get staff() {
-    return this._staff;
+  public get game() {
+    return this._game;
   }
 }
 

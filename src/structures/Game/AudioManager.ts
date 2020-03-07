@@ -1,26 +1,26 @@
 import { AudioListener, AudioLoader } from "three";
 
-import Audio from "@/structures/Game/AudioManager/Audio";
+import Game from "@/structures/Game";
 
-import Staff from "@/structures/Staff";
+import Audio from "@/structures/Game/AudioManager/Audio";
 
 class AudioManager {
   private _entries = new Map<String, Audio>();
   private _listener = new AudioListener();
   private _loader = new AudioLoader();
 
-  public constructor(private _staff: Staff) {}
+  public constructor(private _game: Game) {}
 
   public get entries() {
     return this._entries;
   }
 
-  public get listener() {
-    return this._listener;
+  public get game() {
+    return this._game;
   }
 
-  public get staff() {
-    return this._staff;
+  public get listener() {
+    return this._listener;
   }
 
   public async add(name: string, url: string, shouldReplace = false) {
