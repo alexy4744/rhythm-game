@@ -1,5 +1,3 @@
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
 import Game from "@/structures/Game";
 
 import Camera from "@/structures/Game/Video/Camera";
@@ -7,14 +5,22 @@ import Renderer from "@/structures/Game/Video/Renderer";
 import Scene from "@/structures/Game/Video/Scene";
 
 class Video {
-  private _camera = new Camera(50, window.innerWidth / window.innerHeight, 1, 1000);
-  private _renderer = new Renderer({ antialias: true });
-  private _scene = new Scene(this);
+  private _camera = new Camera(this.game, {
+    aspect: window.innerWidth / window.innerHeight,
+    far: 1000,
+    fov: 75,
+    near: 1
+  });
+
+  private _renderer = new Renderer({
+    alpha: true,
+    antialias: true
+  });
+
+  private _scene = new Scene(this.game);
 
   public constructor(private _game: Game) {
     window.addEventListener("resize", () => this._resize());
-
-    new OrbitControls(this.camera, this.renderer.domElement);
   }
 
   public get camera() {
@@ -33,12 +39,14 @@ class Video {
     return this._scene;
   }
 
-  public render() {
-    return this.renderer.render(this.scene, this.camera);
+  public initialize() {
+    this.camera.initialize();
+    this.scene.initialize();
   }
 
   public update() {
-
+    this.scene.update();
+    this.renderer.render(this.scene, this.camera);
   }
 
   private _resize() {

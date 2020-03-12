@@ -1,3 +1,5 @@
+import { Clock } from "three";
+
 import AudioManager from "@/structures/Game/AudioManager";
 import InputHandler from "@/structures/Game/InputHandler";
 import Video from "@/structures/Game/Video";
@@ -10,6 +12,8 @@ import BeatmapType from "@/types/Beatmap";
 import FLAGS from "@/constants/flags";
 
 class Game {
+  private _clock = new Clock(false);
+
   private _audioManager = new AudioManager(this);
   private _inputHandler = new InputHandler(this);
   private _video = new Video(this);
@@ -20,8 +24,16 @@ class Game {
     return this._audioManager;
   }
 
+  public get clock() {
+    return this._clock;
+  }
+
   public get inputHandler() {
     return this._inputHandler;
+  }
+
+  public get paused() {
+    return !this.clock.running;
   }
 
   public get staff() {
@@ -35,45 +47,37 @@ class Game {
   public static async create(beatmap: BeatmapType) {
     const staff = new Staff(
       beatmap.metadata.bpm,
-      beatmap.notes.map(note => new Note(note.key, note.start, note.end))
+      beatmap.notes.map(note => new Note(note.column, note.start, note.end))
     );
 
-    const game = new Game(staff);
+    const game = new Game(staff)._initialize();
 
     await game.audioManager.add(FLAGS.AUDIO.BEATMAP_MP3, beatmap.metadata.mp3);
 
     return game;
   }
 
-  // Kick start the game loop
   public start() {
-    const mp3 = this.audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3);
-    if (!mp3) throw new Error("Beatmap MP3 is not found in audio manager!");
+    this.clock.start();
 
     requestAnimationFrame(() => {
-      mp3.play();
       this._update();
     });
   }
 
-  // The game loop
+  private _initialize() {
+    this.video.initialize();
+
+    return this;
+  }
+
   private _update() {
-    requestAnimationFrame(() => this._update());
-
-    this.video.render();
-
-    if (this.staff.currentNoteIndex >= this.staff.notes.length) return;
-
-    const mp3 = this.audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3);
-    if (!mp3) throw new Error("Beatmap music file not loaded in audio manager!");
-
-    const currentNotePositionInBeats = this.staff.currentNote.start / this.staff.secondsPerBeat;
-    const currentSongPositionInBeats = mp3.currentPosition / this.staff.secondsPerBeat;
-
-    if (currentNotePositionInBeats < currentSongPositionInBeats) {
-      console.log(mp3.currentPosition, currentSongPositionInBeats, currentNotePositionInBeats);
-      this.staff.proceed();
+    if (!this.paused) {
+      this.audioManager.update();
+      this.video.update();
     }
+
+    requestAnimationFrame(() => this._update());
   }
 }
 

@@ -2,7 +2,7 @@ import NoteType from "@/types/Note";
 
 class Note implements NoteType {
   public constructor(
-    private _key: number,
+    private _column: number,
     private _start: number,
     // If the note should be held, end specifies when the note should be released
     private _end?: number
@@ -12,8 +12,8 @@ class Note implements NoteType {
     return this._end;
   }
 
-  public get key() {
-    return this._key;
+  public get column() {
+    return this._column;
   }
 
   public get start() {

@@ -1,19 +1,36 @@
-// Constructs a falling mesh on the fret board
+import { IcosahedronGeometry, Mesh, MeshPhongMaterial, Vector3 } from "three";
 
-import { IcosahedronGeometry, Mesh, MeshPhongMaterial } from "three";
+import Game from "@/structures/Game";
 
-class FallingNote {
-  private _geometry = new IcosahedronGeometry();
-  private _material = new MeshPhongMaterial({ color: this.color });
+import SceneObject from "@/structures/Game/Video/Scene/SceneObject";
+
+import FretBoard from "@/structures/Game/Video/Scene/Objects/FretBoard";
+import StrumBar from "@/structures/Game/Video/Scene/Objects/StrumBar";
+
+import FLAGS from "@/constants/flags";
+
+class FallingNote implements SceneObject {
+  public static readonly RADIUS = 5;
+
+  private _geometry = new IcosahedronGeometry(FallingNote.RADIUS);
+  private _material = new MeshPhongMaterial({ color: 0x5089db });
   private _mesh = new Mesh(this.geometry, this.material);
 
-  public constructor(private _color: number) {
+  public constructor(private _game: Game, private _column: number) {
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
+
+    this.mesh.position.x = StrumBar.columnToXPosition(this.column) * StrumBar.COLUMN_SPACING;
+    this.mesh.position.y = FallingNote.RADIUS * 2;
+    this.mesh.position.z = -((FretBoard.DEPTH / 2) - FallingNote.RADIUS);
   }
 
-  public get color() {
-    return this._color;
+  public get column() {
+    return this._column;
+  }
+
+  public get game() {
+    return this._game;
   }
 
   public get geometry() {
@@ -26,6 +43,29 @@ class FallingNote {
 
   public get mesh() {
     return this._mesh;
+  }
+
+  public update() {
+    this.mesh.rotation.x += 0.015;
+    this.mesh.rotation.y += 0.015;
+
+    this._updatePosition();
+  }
+
+  private _updatePosition() {
+    const { audioManager, staff } = this.game;
+
+    const mp3 = audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3);
+    if (!mp3) return;
+
+    const currentNotePositionInBeats = staff.currentNote.start / staff.secondsPerBeat;
+    const currentSongPositionInBeats = mp3.currentPosition / staff.secondsPerBeat;
+
+    // this.mesh.position.set(
+    //   this.mesh.position.x,
+    //   this.mesh.position.y,
+    //   50 * (((FretBoard.BEATS_SHOWN_IN_ADVANCE - ((currentNotePositionInBeats - currentSongPositionInBeats) / staff.secondsPerBeat)) / FretBoard.BEATS_SHOWN_IN_ADVANCE)),
+    // );
   }
 }
 

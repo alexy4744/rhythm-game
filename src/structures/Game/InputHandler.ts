@@ -6,6 +6,8 @@ class InputHandler {
   public get game() {
     return this._game;
   }
+
+  public initialize() {}
 }
 
 export default InputHandler;
