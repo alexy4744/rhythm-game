@@ -1,5 +1,7 @@
 import { BoxGeometry, Mesh, MeshPhongMaterial } from "three";
 
+import AUDIO_MANAGER from "@/constants/audio_manager";
+
 import Game from "@/structures/Game";
 
 import SceneObject from "@/structures/Game/Video/Scene/SceneObject";
@@ -8,11 +10,9 @@ import FallingNote from "@/structures/Game/Video/Scene/Objects/FretBoard/Falling
 
 import StrumBar from "@/structures/Game/Video/Scene/Objects/StrumBar";
 
-import FLAGS from "@/constants/flags";
-
 class FretBoard implements SceneObject {
-  public static readonly BEATS_SHOWN_IN_ADVANCE = 3;
-  
+  public static readonly BEATS_SHOWN_IN_ADVANCE = 0;
+
   public static readonly DEPTH = 200;
   public static readonly WIDTH = 50;
 
@@ -59,17 +59,21 @@ class FretBoard implements SceneObject {
     const { audioManager, staff } = this.game;
     if (!staff.nextNote) return;
 
-    const mp3 = audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3);
+    const mp3 = audioManager.entries.get(AUDIO_MANAGER.BEATMAP_MP3);
     if (!mp3) return;
 
     const currentNotePositionInBeats = staff.currentNote.start / staff.secondsPerBeat;
     const currentSongPositionInBeats = mp3.currentPosition / staff.secondsPerBeat;
 
+    // if (currentNotePositionInBeats < currentSongPositionInBeats + 1) {
+    //   console.log("EXACT", mp3.currentPosition, currentSongPositionInBeats, currentNotePositionInBeats)
+    // }
+
     if (currentNotePositionInBeats < currentSongPositionInBeats + FretBoard.BEATS_SHOWN_IN_ADVANCE) {
-      console.log(mp3.currentPosition, currentSongPositionInBeats, currentNotePositionInBeats);
+      console.log("ADVANCED", mp3.currentPosition, currentSongPositionInBeats, currentNotePositionInBeats);
 
       const falling = new FallingNote(this.game, staff.currentNote.column);
-  
+
       this.fallingNotes.push(falling);
       this.mesh.add(falling.mesh);
 

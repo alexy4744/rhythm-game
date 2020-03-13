@@ -6,19 +6,23 @@ import SceneObject from "@/structures/Game/Video/Scene/SceneObject";
 
 import FretBoard from "@/structures/Game/Video/Scene/Objects/FretBoard";
 
+import StationaryNote from "@/structures/Game/Video/Scene/Objects/StrumBar/StationaryNote";
+
 class StrumBar implements SceneObject {
-  public static readonly COLUMN_SPACING = 10;
-  public static readonly MAX_COLUMNS = 5;
+  public static readonly DEPTH = 15;
+  public static readonly WIDTH = 50;
+
+  public static readonly MAX_COLUMNS = 5; // Can only be odd
+  public static readonly COLUMN_SPACING = StrumBar.WIDTH / StrumBar.MAX_COLUMNS;
 
   public static readonly FIRST_COLUMN_IDX = -Math.floor(StrumBar.MAX_COLUMNS / 2);
   public static readonly LAST_COLUMN_IDX = Math.floor(StrumBar.MAX_COLUMNS / 2);
 
-  public static readonly DEPTH = 15;
-  public static readonly WIDTH = 50;
-
   private _geometry = new BoxGeometry(StrumBar.WIDTH, 0, StrumBar.DEPTH, 0);
   private _material = new MeshPhongMaterial({ color: 0xffac32 });
   private _mesh = new Mesh(this.geometry, this.material);
+
+  private _stationaryNotes: StationaryNote[] = [];
 
   public constructor(private _game: Game) {
     this.mesh.castShadow = true;
@@ -26,18 +30,7 @@ class StrumBar implements SceneObject {
 
     this.mesh.position.z = FretBoard.DEPTH - (StrumBar.WIDTH - StrumBar.DEPTH);
 
-    // Create the notes on the strum bar
-    for (let i = StrumBar.FIRST_COLUMN_IDX; i <= StrumBar.LAST_COLUMN_IDX; i += 1) {
-      const mesh = new Mesh(
-        new BoxGeometry(5, 2.5, 5, 0),
-        new MeshPhongMaterial({ color: 0x5089db * i / 2 })
-      );
-
-      mesh.position.x = i * StrumBar.COLUMN_SPACING;
-      mesh.position.y = 1.25;
-
-      this.mesh.add(mesh);
-    }
+    this._spawnStationaryNotes();
   }
 
   public get game() {
@@ -54,6 +47,10 @@ class StrumBar implements SceneObject {
 
   public get mesh() {
     return this._mesh;
+  }
+
+  public get stationaryNotes() {
+    return this._stationaryNotes;
   }
 
   // Get x position from a column number
@@ -73,6 +70,15 @@ class StrumBar implements SceneObject {
   }
 
   public update() {
+  }
+
+  private _spawnStationaryNotes() {
+    for (let i = StrumBar.FIRST_COLUMN_IDX; i <= StrumBar.LAST_COLUMN_IDX; i += 1) {
+      const stationaryNote = new StationaryNote(this.game, i);
+
+      this.stationaryNotes.push(stationaryNote);
+      this.mesh.add(stationaryNote.mesh);
+    }
   }
 }
 

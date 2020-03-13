@@ -4,5 +4,31 @@ body,
 canvas,
 html {
   height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+#btn-start {
+  background: linear-gradient(to top right, rgba(255, 87, 34, 1) 0%, rgba(251, 140, 0, 1) 100%);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 1px 1px 30px rgba(255, 111, 0, .5);
+  color: #fff;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 64px;
+  left: 50%;
+  outline: none;
+  padding: 15px 25px;
+  position: absolute;
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+}
+
+#start-wrapper {
+  background-color: black;
+  height: 100%;
   width: 100%;
 }

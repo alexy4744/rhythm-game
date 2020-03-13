@@ -1,5 +1,7 @@
 import { Clock } from "three";
 
+import AUDIO_MANAGER from "@/constants/audio_manager";
+
 import AudioManager from "@/structures/Game/AudioManager";
 import InputHandler from "@/structures/Game/InputHandler";
 import Video from "@/structures/Game/Video";
@@ -8,8 +10,6 @@ import Note from "@/structures/Note";
 import Staff from "@/structures/Staff";
 
 import BeatmapType from "@/types/Beatmap";
-
-import FLAGS from "@/constants/flags";
 
 class Game {
   private _clock = new Clock(false);
@@ -52,7 +52,7 @@ class Game {
 
     const game = new Game(staff)._initialize();
 
-    await game.audioManager.add(FLAGS.AUDIO.BEATMAP_MP3, beatmap.metadata.mp3);
+    await game.audioManager.add(AUDIO_MANAGER.BEATMAP_MP3, beatmap.metadata.mp3);
 
     return game;
   }
@@ -60,9 +60,7 @@ class Game {
   public start() {
     this.clock.start();
 
-    requestAnimationFrame(() => {
-      this._update();
-    });
+    requestAnimationFrame(() => this._update());
   }
 
   private _initialize() {

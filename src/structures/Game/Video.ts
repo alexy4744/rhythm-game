@@ -8,7 +8,7 @@ class Video {
   private _camera = new Camera(this.game, {
     aspect: window.innerWidth / window.innerHeight,
     far: 1000,
-    fov: 75,
+    fov: 50,
     near: 1
   });
 

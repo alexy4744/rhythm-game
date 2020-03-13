@@ -1,4 +1,6 @@
-import { IcosahedronGeometry, Mesh, MeshPhongMaterial, Vector3 } from "three";
+import { IcosahedronGeometry, Mesh, MeshPhongMaterial } from "three";
+
+import AUDIO_MANAGER from "@/constants/audio_manager";
 
 import Game from "@/structures/Game";
 
@@ -6,8 +8,6 @@ import SceneObject from "@/structures/Game/Video/Scene/SceneObject";
 
 import FretBoard from "@/structures/Game/Video/Scene/Objects/FretBoard";
 import StrumBar from "@/structures/Game/Video/Scene/Objects/StrumBar";
-
-import FLAGS from "@/constants/flags";
 
 class FallingNote implements SceneObject {
   public static readonly RADIUS = 5;
@@ -55,17 +55,12 @@ class FallingNote implements SceneObject {
   private _updatePosition() {
     const { audioManager, staff } = this.game;
 
-    const mp3 = audioManager.entries.get(FLAGS.AUDIO.BEATMAP_MP3);
+    const mp3 = audioManager.entries.get(AUDIO_MANAGER.BEATMAP_MP3);
     if (!mp3) return;
 
     const currentNotePositionInBeats = staff.currentNote.start / staff.secondsPerBeat;
     const currentSongPositionInBeats = mp3.currentPosition / staff.secondsPerBeat;
 
-    // this.mesh.position.set(
-    //   this.mesh.position.x,
-    //   this.mesh.position.y,
-    //   50 * (((FretBoard.BEATS_SHOWN_IN_ADVANCE - ((currentNotePositionInBeats - currentSongPositionInBeats) / staff.secondsPerBeat)) / FretBoard.BEATS_SHOWN_IN_ADVANCE)),
-    // );
   }
 }
 

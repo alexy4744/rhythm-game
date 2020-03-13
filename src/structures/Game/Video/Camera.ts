@@ -23,7 +23,7 @@ class Camera extends PerspectiveCamera {
   }
 
   public initialize() {
-    this.position.set(0, 20, 200);
+    this.position.set(0, 25, 220);
     this.lookAt(this.game.video.scene.position);
 
     this.updateProjectionMatrix();
