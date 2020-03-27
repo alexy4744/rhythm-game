@@ -28,7 +28,7 @@ class UI {
     }
 
     const columns = new PIXI.Container();
-
+    
     this.game.stage.addChild(columns);
 
     for (let i = 0; i < amount; i += 1) {
@@ -39,6 +39,8 @@ class UI {
 
       columns.addChild(column.container);
     }
+
+    columns.x = (window.innerWidth / 2) - (columns.width / 2);
   }
 }
 

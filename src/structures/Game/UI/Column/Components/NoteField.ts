@@ -2,21 +2,24 @@ import * as PIXI from "pixi.js";
 
 import AudioAliases from "@/constants/AudioAliases";
 
-import Column from "@/structures/Game/UI/Column";
 import Component from "@/structures/Game/UI/Column/Component";
 import Note from "@/structures/Game/UI/Column/Components/NoteField/Note";
 
 import isEven from "@/utils/isEven";
 
 class NoteField extends Component {
-  public static readonly BEATS_SHOWN_IN_ADVANCE = 3;
-  public static readonly HEIGHT = 650;
+  public static readonly HEIGHT = window.innerHeight - 112;
   public static readonly Y = 0;
 
   private _notes: Note[] = [];
+  private _speed: number = this.game.staff.bps;
 
   public get notes() {
     return this._notes;
+  }
+
+  public get speed() {
+    return this._speed;
   }
 
   public initialize() {
@@ -28,6 +31,12 @@ class NoteField extends Component {
     this.sprite.y = NoteField.Y;
 
     return this;
+  }
+
+  public setSpeed(speed: number) {
+    if (speed < 1) throw new RangeError("NoteField speed cannot be less than 1!");
+
+    this._speed = speed;
   }
 
   public update() {
@@ -45,7 +54,7 @@ class NoteField extends Component {
     const currentNoteInBeats = currentNote.start / staff.crotchet;
 
     // song position in beats > current note in beats
-    if (songPositionInBeats + NoteField.BEATS_SHOWN_IN_ADVANCE > currentNoteInBeats) {
+    if (songPositionInBeats + this.speed > currentNoteInBeats) {
       const { end, position, start } = currentNote;
       const note = new Note(this.column, position, start, end).initialize();
 

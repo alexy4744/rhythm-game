@@ -6,14 +6,13 @@ import Column from "@/structures/Game/UI/Column";
 import Component from "@/structures/Game/UI/Column/Component";
 
 import HitArea from "@/structures/Game/UI/Column/Components/HitArea";
-import NoteField from "@/structures/Game/UI/Column/Components/NoteField";
 
 import NoteType from "@/types/Beatmap/Note";
 
 import lerp from "@/utils/lerp";
 
 class Note extends Component implements NoteType {
-  public static readonly HEIGHT = 32;
+  public static readonly HEIGHT = 16;
 
   public constructor(
     column: Column,
@@ -51,19 +50,16 @@ class Note extends Component implements NoteType {
     const songPosition = this.game.audio.getTrackPosition(AudioAliases.BeatmapTrack, 0);
     if (!songPosition) return;
 
-    const { staff } = this.game;
+    const { crotchet } = this.game.staff;
 
-    const songPositionInBeats = (songPosition / 1000) / staff.crotchet;
-    const currentNoteInBeats = this.start / staff.crotchet;
+    const songPositionInBeats = (songPosition / 1000) / crotchet;
+    const currentNoteInBeats = this.start / crotchet;
 
     if (songPositionInBeats > currentNoteInBeats) return;
 
-    // https://www.reddit.com/r/gamedev/comments/4ayt6w/best_way_of_coding_the_movement_of_notes_in_a/d14n8j4/
-    this.sprite.y = lerp(
-      -Note.HEIGHT,
-      HitArea.Y,
-      1 - (currentNoteInBeats - songPositionInBeats) / NoteField.BEATS_SHOWN_IN_ADVANCE
-    );
+    const progress = 1 - (currentNoteInBeats - songPositionInBeats) / this.column.noteField.speed;
+
+    this.sprite.y = lerp(-Note.HEIGHT, HitArea.Y, progress);
   }
 }
 

@@ -10,9 +10,11 @@
   "dependencies": {
     "normalize.css": "^8.0.1",
     "pixi-sound": "^3.0.4",
-    "pixi.js": "^5.2.1"
+    "pixi.js": "^5.2.1",
+    "superagent": "^5.2.2"
   },
   "devDependencies": {
+    "@types/superagent": "^4.1.7",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "css-loader": "^3.4.2",

@@ -4,7 +4,7 @@ import Component from "@/structures/Game/UI/Column/Component";
 import NoteField from "@/structures/Game/UI/Column/Components/NoteField";
 
 class HitArea extends Component {
-  public static readonly HEIGHT = 32;
+  public static readonly HEIGHT = 16;
   public static readonly Y = NoteField.HEIGHT;
 
   public initialize() {
