@@ -1,5 +1,5 @@
 type Note = {
-  column: number,
+  position: number,
   start: number,
   end?: number
 }

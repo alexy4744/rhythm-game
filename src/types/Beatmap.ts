@@ -1,4 +1,4 @@
-import Note from "@/types/Note";
+import NoteType from "@/types/Beatmap/Note";
 
 type Beatmap = {
   metadata: {
@@ -8,11 +8,11 @@ type Beatmap = {
     mp3: string,
     title: string
   },
-  notes: Note[],
+  notes: NoteType[],
   versioning: {
     beatmap: string,
     fileFormat: string
   }
-};
+}
 
 export default Beatmap;

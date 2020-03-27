@@ -1,58 +1,51 @@
-// Keeps track of current and next note and holds all the notes from a beatmap
-
-import Note from "@/structures/Note";
+import NoteType from "@/types/Beatmap/Note";
 
 class Staff {
-  private _currentNoteIndex = 0;
+  private _currentBeatIndex = 0;
+  private _lastBeat = 0; // Time since last beat
 
   public constructor(
     private _bpm: number,
-    private _notes: Note[] = []
+    private _notes: NoteType[]
   ) { }
 
   public get bpm() {
     return this._bpm;
   }
 
-  public get currentNote() {
-    return this.notes[this.currentNoteIndex];
+  public get bps() {
+    return this.bpm / 60;
   }
 
-  public get currentNoteIndex() {
-    return this._currentNoteIndex;
+  public get crotchet() {
+    return 60 / this.bpm;
+  }
+
+  public get currentNote() {
+    return this.notes[this._currentBeatIndex];
+  }
+
+  public get lastBeat() {
+    return this._lastBeat;
   }
 
   public get nextNote() {
-    return this.notes[this.currentNoteIndex + 1];
-  }
-
-  public get nextNoteIndex() {
-    return this.currentNoteIndex + 1;
+    return this.notes[this._currentBeatIndex + 1];
   }
 
   public get notes() {
     return this._notes;
   }
 
-  public get secondsPerBeat() {
-    return 60 / this.bpm;
+  public proceed() {
+    this._currentBeatIndex += 1;
+    this._lastBeat += this.crotchet;
   }
 
-  public addNote(note: Note) {
-    return this.notes.push(note);
-  }
+  public setBPM(bpm: number) {
+    if (bpm < 1) throw new Error("BPM cannot be less than 1!");
 
-  public addNotes(notes: Note[]) {
-    return this.notes.push(...notes)
-  }
-
-  public proceed(index = this.currentNoteIndex) {
-    if (index >= this.notes.length) return;
-    this._currentNoteIndex += 1;
-  }
-
-  public removeNote(noteIndex: number) {
-    return this.notes.splice(noteIndex, 1);
+    this._bpm = bpm;
   }
 }
 

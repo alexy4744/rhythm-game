@@ -1,81 +1,61 @@
-import { Clock } from "three";
+import { Application } from "pixi.js";
 
-import AUDIO_MANAGER from "@/constants/audio_manager";
+import AudioAliases from "@/constants/AudioAliases";
 
-import AudioManager from "@/structures/Game/AudioManager";
-import InputHandler from "@/structures/Game/InputHandler";
-import Video from "@/structures/Game/Video";
-
-import Note from "@/structures/Note";
 import Staff from "@/structures/Staff";
+
+import Audio from "@/structures/Game/Audio";
+import Input from "@/structures/Game/Input";
+import UI from "@/structures/Game/UI";
 
 import BeatmapType from "@/types/Beatmap";
 
-class Game {
-  private _clock = new Clock(false);
+class Game extends Application {
+  private _audio = new Audio(this);
+  private _input = new Input(this);
+  private _ui = new UI(this);
 
-  private _audioManager = new AudioManager(this);
-  private _inputHandler = new InputHandler(this);
-  private _video = new Video(this);
+  public constructor(
+    private _staff: Staff,
+    options = {}
+  ) {
+    super(options);
+    document.body.appendChild(this.view);
 
-  public constructor(private _staff: Staff) { }
-
-  public get audioManager() {
-    return this._audioManager;
+    window.addEventListener("resize", () => this.renderer.resize(window.innerWidth, window.innerHeight));
+    window.addEventListener("wheel", (event) => event.preventDefault(), { passive: false });
   }
 
-  public get clock() {
-    return this._clock;
+  public get audio() {
+    return this._audio;
   }
 
-  public get inputHandler() {
-    return this._inputHandler;
-  }
-
-  public get paused() {
-    return !this.clock.running;
+  public get input() {
+    return this._input;
   }
 
   public get staff() {
     return this._staff;
   }
 
-  public get video() {
-    return this._video;
+  public get ui() {
+    return this._ui;
   }
 
-  public static async create(beatmap: BeatmapType) {
-    const staff = new Staff(
-      beatmap.metadata.bpm,
-      beatmap.notes.map(note => new Note(note.column, note.start, note.end))
-    );
+  public static async start(beatmap: BeatmapType, options = {}) {
+    const staff = new Staff(beatmap.metadata.bpm, beatmap.notes);
+    const game = new Game(staff, options);
 
-    const game = new Game(staff)._initialize();
+    const track = await game.audio.add(AudioAliases.BeatmapTrack, {
+      autoPlay: false,
+      preload: true,
+      singleInstance: true,
+      url: beatmap.metadata.mp3
+    });
 
-    await game.audioManager.add(AUDIO_MANAGER.BEATMAP_MP3, beatmap.metadata.mp3);
+    if (!track.sound) throw new Error("Could not load track sound!");
 
-    return game;
-  }
-
-  public start() {
-    this.clock.start();
-
-    requestAnimationFrame(() => this._update());
-  }
-
-  private _initialize() {
-    this.video.initialize();
-
-    return this;
-  }
-
-  private _update() {
-    if (!this.paused) {
-      this.audioManager.update();
-      this.video.update();
-    }
-
-    requestAnimationFrame(() => this._update());
+    track.sound.play();
   }
 }
 
