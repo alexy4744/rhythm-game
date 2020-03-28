@@ -64,6 +64,7 @@ const ask = (question) => new Promise(resolve => rl.question(`${question} `, res
         artist: "CHANGE_ME",
         beatmapper: "CHANGE_ME",
         bpm: 0,
+        keys: 0,
         mp3: "CHANGE_ME",
         title: "CHANGE_ME"
       },

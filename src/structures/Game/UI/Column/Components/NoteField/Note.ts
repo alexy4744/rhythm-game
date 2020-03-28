@@ -7,7 +7,7 @@ import Component from "@/structures/Game/UI/Column/Component";
 
 import HitArea from "@/structures/Game/UI/Column/Components/HitArea";
 
-import NoteType from "@/types/Beatmap/Note";
+import NoteType from "@/types/Note";
 
 import lerp from "@/utils/lerp";
 
@@ -52,7 +52,7 @@ class Note extends Component implements NoteType {
     const songPosition = this.game.audio.getTrackPosition(AudioAliases.BeatmapTrack, 0);
     if (!songPosition) return;
 
-    const { crotchet } = this.game.staff;
+    const { crotchet } = this.game.beatmap;
 
     const songPositionInBeats = songPosition / crotchet;
     const currentNoteInBeats = this.start / crotchet;

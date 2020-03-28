@@ -12,7 +12,7 @@ class NoteField extends Component {
   public static readonly Y = 0;
 
   private _notes: Note[] = [];
-  private _speed: number = this.game.staff.bps;
+  private _speed: number = this.game.beatmap.bps;
 
   public get notes() {
     return this._notes;
@@ -48,14 +48,14 @@ class NoteField extends Component {
     const songPosition = this.game.audio.getTrackPosition(AudioAliases.BeatmapTrack, 0);
     if (!songPosition) return;
 
-    const { staff } = this.game;
-    const { currentNote } = staff;
+    const { beatmap } = this.game;
+    const { currentNote } = beatmap;
 
     // If the current note is not for this column
     if (!currentNote || currentNote.position !== this.column.index) return;
 
-    const songPositionInBeats = songPosition / staff.crotchet;
-    const currentNoteInBeats = currentNote.start / staff.crotchet;
+    const songPositionInBeats = songPosition / beatmap.crotchet;
+    const currentNoteInBeats = currentNote.start / beatmap.crotchet;
 
     // song position in beats + number of beats ahead > current note in beats
     if (songPositionInBeats + this.speed > currentNoteInBeats) {
@@ -65,7 +65,7 @@ class NoteField extends Component {
       this.notes.push(note);
       this.column.container.addChild(note.sprite);
 
-      staff.proceed();
+      beatmap.proceed();
     }
   }
 }

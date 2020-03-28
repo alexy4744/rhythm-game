@@ -22,7 +22,9 @@ class UI {
     return this._game;
   }
 
-  private createColumns(amount = 7) {
+  private createColumns() {
+    const amount = this.game.beatmap.metadata.keys;
+
     if (amount < UI.MIN_COLUMNS || amount > UI.MAX_COLUMNS) {
       throw new RangeError(`The amount must be between ${UI.MIN_COLUMNS} and ${UI.MAX_COLUMNS}`);
     }

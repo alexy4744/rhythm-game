@@ -1,15 +1,22 @@
-import NoteType from "@/types/Beatmap/Note";
+import NoteType from "@/types/Note";
 
-class Staff {
+class Beatmap {
   private _currentBeatIndex = 0;
 
   public constructor(
-    private _bpm: number,
+    private _metadata: {
+      artist: string,
+      beatmapper: string,
+      bpm: number,
+      keys: number,
+      mp3: string,
+      title: string
+    },
     private _notes: NoteType[]
   ) { }
 
   public get bpm() {
-    return this._bpm;
+    return this.metadata.bpm;
   }
 
   public get bps() {
@@ -22,6 +29,10 @@ class Staff {
 
   public get currentNote() {
     return this.notes[this._currentBeatIndex];
+  }
+
+  public get metadata() {
+    return this._metadata;
   }
 
   public get nextNote() {
@@ -39,8 +50,8 @@ class Staff {
   public setBPM(bpm: number) {
     if (bpm < 1) throw new Error("BPM cannot be less than 1!");
 
-    this._bpm = bpm;
+    this._metadata.bpm = bpm;
   }
 }
 
-export default Staff;
+export default Beatmap;
