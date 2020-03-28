@@ -41,7 +41,10 @@ class NoteField extends Component {
 
   public update() {
     this.notes.forEach(note => note.update())
+    this._spawnNotes();
+  }
 
+  private _spawnNotes() {
     const songPosition = this.game.audio.getTrackPosition(AudioAliases.BeatmapTrack, 0);
     if (!songPosition) return;
 
@@ -50,10 +53,10 @@ class NoteField extends Component {
 
     if (!currentNote || currentNote.position !== this.column.index) return;
 
-    const songPositionInBeats = (songPosition / 1000) / staff.crotchet;
+    const songPositionInBeats = songPosition / staff.crotchet;
     const currentNoteInBeats = currentNote.start / staff.crotchet;
 
-    // song position in beats > current note in beats
+    // song position in beats + number of beats ahead > current note in beats
     if (songPositionInBeats + this.speed > currentNoteInBeats) {
       const { end, position, start } = currentNote;
       const note = new Note(this.column, position, start, end).initialize();

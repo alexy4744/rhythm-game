@@ -16,7 +16,7 @@ class Column {
   public constructor(
     private _game: Game,
     private _index: number
-  ) { }
+  ) {}
 
   public get container() {
     return this._container;
@@ -52,6 +52,10 @@ class Column {
       this.hitArea.sprite,
       this.key.sprite
     );
+
+    // window.addEventListener("resize", () => {
+    //   this.noteField.sprite.height = window.innerHeight - this.hitArea.sprite.height - this.key.sprite.height;
+    // });
 
     return this;
   }

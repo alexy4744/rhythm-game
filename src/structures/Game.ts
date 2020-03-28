@@ -21,9 +21,6 @@ class Game extends Application {
   ) {
     super(options);
     document.body.appendChild(this.view);
-
-    window.addEventListener("resize", () => this.renderer.resize(window.innerWidth, window.innerHeight));
-    window.addEventListener("wheel", (event) => event.preventDefault(), { passive: false });
   }
 
   public get audio() {

@@ -6,7 +6,9 @@ import "@/assets/scss/main.scss";
 
 (async () => {
   const beatmap = await superagent
-    .get("/beatmaps/shelter/shelter-easy.json")
+    .get("/beatmaps/violet-soul/violet-soul-novice.json")
+    // .get("/beatmaps/violet-soul/violet-soul-advanced.json")
+    // .get("/beatmaps/shelter/shelter-normal.json")
     .then(res => res.body);
 
   Game.start(beatmap, {

@@ -41,7 +41,7 @@ class Audio extends EventEmitter {
     const instance = track.instances[instanceId];
     if (!instance) return null;
 
-    return instance.progress * (track.duration * 1000);
+    return instance.progress * track.duration;
   }
 }
 

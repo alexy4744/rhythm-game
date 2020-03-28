@@ -40,7 +40,7 @@ class UI {
       columns.addChild(column.container);
     }
 
-    columns.x = (window.innerWidth / 2) - (columns.width / 2);
+    columns.x = (window.innerWidth / 2) - (columns.width / 2)
   }
 }
 

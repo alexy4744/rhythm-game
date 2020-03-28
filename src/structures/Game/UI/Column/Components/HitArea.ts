@@ -18,9 +18,7 @@ class HitArea extends Component {
     return this;
   }
 
-  public update() {
-
-  }
+  public update() { }
 }
 
 export default HitArea;

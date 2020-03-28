@@ -47,15 +47,19 @@ class Note extends Component implements NoteType {
   }
 
   public update() {
+    if (this.destroyed) return;
+
     const songPosition = this.game.audio.getTrackPosition(AudioAliases.BeatmapTrack, 0);
     if (!songPosition) return;
 
     const { crotchet } = this.game.staff;
 
-    const songPositionInBeats = (songPosition / 1000) / crotchet;
+    const songPositionInBeats = songPosition / crotchet;
     const currentNoteInBeats = this.start / crotchet;
 
-    if (songPositionInBeats > currentNoteInBeats) return;
+    if (songPositionInBeats > currentNoteInBeats && !this.destroyed) {
+      return this.destroy();
+    }
 
     const progress = 1 - (currentNoteInBeats - songPositionInBeats) / this.column.noteField.speed;
 
