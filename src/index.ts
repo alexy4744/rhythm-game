@@ -6,6 +6,7 @@ import "@/assets/scss/main.scss";
 
 (async () => {
   const beatmap = await superagent
+    // .get("/beatmaps/frozen-world/frozen-world-easy.json")
     .get("/beatmaps/violet-soul/violet-soul-novice.json")
     // .get("/beatmaps/violet-soul/violet-soul-advanced.json")
     // .get("/beatmaps/shelter/shelter-normal.json")

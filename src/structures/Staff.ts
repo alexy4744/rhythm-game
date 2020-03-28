@@ -2,7 +2,6 @@ import NoteType from "@/types/Beatmap/Note";
 
 class Staff {
   private _currentBeatIndex = 0;
-  private _lastBeat = 0; // Time since last beat
 
   public constructor(
     private _bpm: number,
@@ -25,10 +24,6 @@ class Staff {
     return this.notes[this._currentBeatIndex];
   }
 
-  public get lastBeat() {
-    return this._lastBeat;
-  }
-
   public get nextNote() {
     return this.notes[this._currentBeatIndex + 1];
   }
@@ -39,7 +34,6 @@ class Staff {
 
   public proceed() {
     this._currentBeatIndex += 1;
-    this._lastBeat += this.crotchet;
   }
 
   public setBPM(bpm: number) {

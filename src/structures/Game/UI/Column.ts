@@ -53,10 +53,6 @@ class Column {
       this.key.sprite
     );
 
-    // window.addEventListener("resize", () => {
-    //   this.noteField.sprite.height = window.innerHeight - this.hitArea.sprite.height - this.key.sprite.height;
-    // });
-
     return this;
   }
 

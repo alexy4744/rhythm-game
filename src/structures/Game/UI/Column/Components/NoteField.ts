@@ -51,6 +51,7 @@ class NoteField extends Component {
     const { staff } = this.game;
     const { currentNote } = staff;
 
+    // If the current note is not for this column
     if (!currentNote || currentNote.position !== this.column.index) return;
 
     const songPositionInBeats = songPosition / staff.crotchet;

@@ -5,6 +5,7 @@ type Beatmap = {
     artist: string,
     beatmapper: string,
     bpm: number,
+    keys: number,
     mp3: string,
     title: string
   },

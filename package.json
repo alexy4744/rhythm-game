@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode=production",
-    "convert:osu": "node ./converters/osu_mania.js",
+    "convert:osu": "node ./converters/osu_mania",
     "dev": "webpack-dev-server"
   },
   "dependencies": {
