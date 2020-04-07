@@ -2,11 +2,11 @@ import * as PIXI from "pixi.js";
 
 import Game from "@/structures/Game";
 
-import HitArea from "@/structures/Game/UI/Column/Components/HitArea";
-import Key from "@/structures/Game/UI/Column/Components/Key";
-import NoteField from "@/structures/Game/UI/Column/Components/NoteField";
+import HitArea from "@/structures/Game/UI/Lane/Components/HitArea";
+import Key from "@/structures/Game/UI/Lane/Components/Key";
+import NoteField from "@/structures/Game/UI/Lane/Components/NoteField";
 
-class Column {
+class Lane {
   private _container = new PIXI.Container();
 
   private _hitArea = new HitArea(this);
@@ -43,9 +43,9 @@ class Column {
   }
 
   public initialize() {
+    this.noteField.initialize();
     this.hitArea.initialize();
     this.key.initialize();
-    this.noteField.initialize();
 
     this.container.addChild(
       this.noteField.sprite,
@@ -63,4 +63,4 @@ class Column {
   }
 }
 
-export default Column;
+export default Lane;

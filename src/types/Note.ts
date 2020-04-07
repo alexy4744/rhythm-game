@@ -1,5 +1,5 @@
 type Note = {
-  position: number,
+  laneIndex: number,
   start: number,
   end?: number
 }

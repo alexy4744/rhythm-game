@@ -37,6 +37,8 @@ class Game extends Application {
   public static async start(beatmap: Beatmap, options = {}) {
     const game = new Game(beatmap, options);
 
+    await game.input.keybinds.load();
+
     const track = await game.audio.add(AudioAliases.BeatmapTrack, {
       autoPlay: false,
       preload: true,
@@ -46,7 +48,9 @@ class Game extends Application {
 
     if (!track.sound) throw new Error("Could not load track sound!");
 
-    track.sound.play();
+    track.sound.play({
+      start: 0
+    });
   }
 }
 

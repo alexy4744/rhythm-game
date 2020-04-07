@@ -8,7 +8,7 @@ class Beatmap {
       artist: string,
       beatmapper: string,
       bpm: number,
-      keys: number,
+      lanes: number,
       mp3: string,
       title: string
     },
@@ -17,6 +17,11 @@ class Beatmap {
 
   public get bpm() {
     return this.metadata.bpm;
+  }
+
+  public set bpm(bpm: number) {
+    if (bpm < 1) throw new Error("BPM cannot be less than 1!");
+    this._metadata.bpm = bpm;
   }
 
   public get bps() {
@@ -45,12 +50,6 @@ class Beatmap {
 
   public proceed() {
     this._currentBeatIndex += 1;
-  }
-
-  public setBPM(bpm: number) {
-    if (bpm < 1) throw new Error("BPM cannot be less than 1!");
-
-    this._metadata.bpm = bpm;
   }
 }
 

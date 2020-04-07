@@ -1,9 +1,9 @@
-import * as PIXI from "pixi.js";
+import { Texture } from "pixi.js";
 
-import Component from "@/structures/Game/UI/Column/Component";
+import Component from "@/structures/Game/UI/Lane/Component";
 
-import HitArea from "@/structures/Game/UI/Column/Components/HitArea";
-import NoteField from "@/structures/Game/UI/Column/Components/NoteField";
+import HitArea from "@/structures/Game/UI/Lane/Components/HitArea";
+import NoteField from "@/structures/Game/UI/Lane/Components/NoteField";
 
 class Key extends Component {
   public static readonly HEIGHT = 96;
@@ -14,7 +14,7 @@ class Key extends Component {
 
     this.sprite.alpha = 0.5;
     this.sprite.height = Key.HEIGHT;
-    this.sprite.texture = PIXI.Texture.WHITE;
+    this.sprite.texture = Texture.WHITE;
     this.sprite.y = Key.Y;
 
     return this;

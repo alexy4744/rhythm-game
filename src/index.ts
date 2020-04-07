@@ -11,11 +11,15 @@ import "@/assets/scss/main.scss";
     // .get("/beatmaps/frozen-world/frozen-world-hard.json")
     .get("/beatmaps/violet-soul/violet-soul-novice.json")
     // .get("/beatmaps/violet-soul/violet-soul-advanced.json")
+    // .get("/beatmaps/violet-soul/violet-soul-infinite.json")
+    // .get("/beatmaps/shelter/shelter-easy.json")
     // .get("/beatmaps/shelter/shelter-normal.json")
-    .then((res => new Beatmap(res.body.metadata, res.body.notes)));
+    // .get("/beatmaps/hold/test.json")
+    .then(res => new Beatmap(res.body.metadata, res.body.notes));
 
   Game.start(beatmap, {
     height: window.innerHeight,
+    resizeTo: window,
     width: window.innerWidth
   });
 })();

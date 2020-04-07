@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "artist": "MuryokuP",
+    "beatmapper": "c36098651",
+    "bpm": 120,
+    "lanes": 5,
+    "mp3": "/beatmaps/shelter/shelter.mp3",
+    "title": "Frozen World"
+  },
+  "notes": [
+    {
+      "laneIndex": 0,
+      "start": 3,
+      "end": 3.5
+    },
+    {
+      "laneIndex": 1,
+      "start": 3.5
+    }
+  ],
+  "versioning": {
+    "beatmap": "1.0.0",
+    "fileFormat": "1.0.0"
+  }
+}

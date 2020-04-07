@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
-const columns = require("./columns");
+const lanes = require("./lanes");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -42,15 +42,21 @@ const ask = (question) => new Promise(resolve => rl.question(`${question} `, res
 
     const parts = line.split(",");
 
-    const column = Number(parts[0]);
+    const lane = Number(parts[0]);
     const start = Number(parts[2]);
+    const end = () => {
+      const [time] = parts[5].split(":");
+      return Number(time);
+    }
 
-    if (Number.isNaN(column)) throw new TypeError(`Line ${i}: Column "${column}" is not a number!`);
+    if (Number.isNaN(lane)) throw new TypeError(`Line ${i}: Lane "${lane}" is not a number!`);
     if (Number.isNaN(start)) throw new TypeError(`Line ${i}: Start time "${start}" is not a number!`);
+    if (Number.isNaN(end())) throw new TypeError(`Line ${i}: End time "${end()}" is not a number!`);
 
     notes.push({
-      position: columns[fileFormat][column],
-      start: start / 1000
+      laneIndex: lanes[fileFormat][lane],
+      start: start / 1000,
+      end: end() > 3 ? end() / 1000 : null
     });
   }
 
@@ -64,7 +70,7 @@ const ask = (question) => new Promise(resolve => rl.question(`${question} `, res
         artist: "CHANGE_ME",
         beatmapper: "CHANGE_ME",
         bpm: 0,
-        keys: 0,
+        lanes: 0,
         mp3: "CHANGE_ME",
         title: "CHANGE_ME"
       },

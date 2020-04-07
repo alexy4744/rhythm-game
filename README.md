@@ -4,6 +4,7 @@
 
 http://ludumdare.com/compo/2014/09/09/an-ld48-rhythm-game-part-2/
 http://shinerightstudio.com/posts/music-syncing-in-rhythm-games/
+https://www.reddit.com/r/gamedev/comments/fqwri7/how_do_i_make_the_holdlong_notes_of_a_rhythm_game/
 https://www.reddit.com/r/gamedev/comments/13y26t/how_do_rhythm_games_stay_in_sync_with_the_music/c78aawd/
 https://www.reddit.com/r/gamedev/comments/4ayt6w/best_way_of_coding_the_movement_of_notes_in_a/d14n8j4/
 https://www.reddit.com/r/gamedev/comments/37623b/how_to_approach_a_rhythm_game/

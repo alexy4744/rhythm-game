@@ -1,48 +1,48 @@
-import * as PIXI from "pixi.js";
+import { Container, UPDATE_PRIORITY} from "pixi.js";
 
 import Game from "@/structures/Game";
 
-import Column from "@/structures/Game/UI/Column";
+import Lane from "@/structures/Game/UI/Lane";
 
 class UI {
   public static readonly MAX_COLUMNS = 10; // You don't have more than 10 fingers
   public static readonly MIN_COLUMNS = 1;
 
-  private _columns: Column[] = [];
+  private _lanes: Lane[] = [];
 
   public constructor(private _game: Game) {
     this.createColumns();
-  }
-
-  public get columns() {
-    return this._columns;
   }
 
   public get game() {
     return this._game;
   }
 
-  private createColumns() {
-    const amount = this.game.beatmap.metadata.keys;
+  public get lanes() {
+    return this._lanes;
+  }
 
-    if (amount < UI.MIN_COLUMNS || amount > UI.MAX_COLUMNS) {
-      throw new RangeError(`The amount must be between ${UI.MIN_COLUMNS} and ${UI.MAX_COLUMNS}`);
+  private createColumns() {
+    const amount = this.game.beatmap.metadata.lanes;
+    
+    if (!amount || amount < UI.MIN_COLUMNS || amount > UI.MAX_COLUMNS) {
+      throw new RangeError(`The amount of lanes must be between ${UI.MIN_COLUMNS} and ${UI.MAX_COLUMNS}`);
     }
 
-    const columns = new PIXI.Container();
+    const lanes = new Container();
     
-    this.game.stage.addChild(columns);
+    this.game.stage.addChild(lanes);
 
     for (let i = 0; i < amount; i += 1) {
-      const column = new Column(this.game, i).initialize();
+      const lane = new Lane(this.game, i).initialize();
 
-      this.game.ticker.add(() => column.update());
-      this.columns.push(column);
+      this.game.ticker.add(() => lane.update(), this, UPDATE_PRIORITY.INTERACTION);
+      this.lanes.push(lane);
 
-      columns.addChild(column.container);
+      lanes.addChild(lane.container);
     }
 
-    columns.x = (window.innerWidth / 2) - (columns.width / 2)
+    lanes.x = (window.innerWidth / 2) - (lanes.width / 2)
   }
 }
 
